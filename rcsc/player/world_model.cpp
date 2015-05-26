@@ -607,9 +607,9 @@ WorldModel::update( const ActionEffector & act,
 
     if ( time() == current )
     {
-        std::cerr << teamName() << " : " << self().unum()
-                  << current << "internal update called twice ??"
-                  << std::endl;
+        // std::cerr << teamName() << " : " << self().unum()
+        //           << current << "internal update called twice ??"
+        //           << std::endl;
         return;
     }
 
@@ -916,9 +916,9 @@ WorldModel::updateAfterSee( const VisualSensor & see,
     // check last sight update time
     if ( M_see_time == current )
     {
-        std::cerr << teamName() << " : " << self().unum()
-                  << current << " (updateAfterSee) : called twice "
-                  << std::endl;
+        // std::cerr << teamName() << " : " << self().unum()
+        //           << current << " (updateAfterSee) : called twice "
+        //           << std::endl;
         return;
     }
     //////////////////////////////////////////////////////////////////

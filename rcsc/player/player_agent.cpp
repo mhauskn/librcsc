@@ -178,6 +178,11 @@ struct PlayerAgent::Impl {
     void setDebugFlags();
 
     /*!
+      \brief set debug output flags to logger
+     */
+    void setEnvFlags();
+
+    /*!
       \brief send init or reconnect command to server
 
       init commad is sent in BasicClient's run() method
@@ -785,6 +790,7 @@ PlayerAgent::initImpl( CmdLineParser & cmd_parser )
     }
 
     M_impl->setDebugFlags();
+    M_impl->setEnvFlags();
 
     SelfObject::set_count_thr( config().selfPosCountThr(),
                                config().selfVelCountThr(),
@@ -1388,6 +1394,25 @@ PlayerAgent::Impl::sendByeCommand()
 
     agent_.M_client->setServerAlive( false );
 }
+
+/*-------------------------------------------------------------------*/
+/*!
+
+ */
+void
+PlayerAgent::Impl::setEnvFlags()
+{
+    const PlayerConfig & c = agent_.config();
+
+    if ( ! c.record() )
+    {
+        return;
+    }
+
+    elog.setLogFlag( &current_time_, Logger::ACTION, true );
+    elog.setLogFlag( &current_time_, Logger::WORLD, true );
+}
+
 
 /*-------------------------------------------------------------------*/
 /*!
@@ -2729,6 +2754,9 @@ PlayerAgent::doKick( const double & power,
         return false;
     }
 
+    elog.addText(Logger::ACTION, __FILE__": Kick(%.2f,%.2f)", power,
+                 rel_dir.degree());
+    elog.flush();
     M_effector.setKick( power, rel_dir );
     return true;
 }
@@ -2752,6 +2780,8 @@ PlayerAgent::doTurn( const AngleDeg & moment )
         return false;
     }
 
+    elog.addText(Logger::ACTION, __FILE__": Turn(%.2f)", moment.degree());
+    elog.flush();
     M_effector.setTurn( moment );
     return true;
 }
@@ -2776,6 +2806,8 @@ PlayerAgent::doDash( const double & power,
         return false;
     }
 
+    elog.addText(Logger::ACTION, __FILE__": Dash(%.2f,%.2f)", power, rel_dir.degree());
+    elog.flush();
     M_effector.setDash( power, rel_dir );
     return true;
 }
@@ -2820,6 +2852,8 @@ PlayerAgent::doMove( const double & x,
         return false;
     }
 
+    elog.addText(Logger::ACTION, __FILE__": Move(%.2f,%.2f)", x, y);
+    elog.flush();
     M_effector.setMove( x, y );
     return true;
 }
@@ -2879,6 +2913,8 @@ PlayerAgent::doCatch()
         return false;
     }
 
+    elog.addText(Logger::ACTION, __FILE__": Catch");
+    elog.flush();
     M_effector.setCatch();
     return true;
 }
@@ -2903,6 +2939,8 @@ PlayerAgent::doTackle( const double & power_or_dir,
         return false;
     }
 
+    elog.addText(Logger::ACTION, __FILE__": Tackle(%.2f,%d)", power_or_dir, foul);
+    elog.flush();
     //M_effector.setTackle( power_or_dir, true );
     M_effector.setTackle( power_or_dir, foul );
     return true;

@@ -191,9 +191,9 @@ SeeState::updateBySee( const GameTime & see_time,
         {
             dlog.addText( Logger::SYSTEM,
                           __FILE__" (updateBySee) estimated synch, but duplicated" );
-            std::cerr << see_time
-                      << " SeeState.updateSee. estimated synch, but duplicated"
-                      << std::endl;
+            // std::cerr << see_time
+            //           << " SeeState.updateSee. estimated synch, but duplicated"
+            //           << std::endl;
             M_last_timing = TIME_NOSYNCH;
         }
     }
