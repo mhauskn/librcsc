@@ -933,6 +933,7 @@ public:
 
 //! global variable
 extern Logger dlog;
+extern Logger elog;
 
 }
 

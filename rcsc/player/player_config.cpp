@@ -122,6 +122,7 @@ PlayerConfig::setDefaultParam()
     //
 
     M_debug = false;
+    M_record = false;
     M_log_dir = "/tmp";
 
     //
@@ -221,6 +222,7 @@ PlayerConfig::createParamMap( ParamMap & param_map )
         ( "config_dir", "", &M_config_dir )
 
         ( "debug", "", BoolSwitch( &M_debug ) )
+        ( "record", "", BoolSwitch( &M_record ) )
         ( "log_dir", "", &M_log_dir )
 
         ( "debug_server_connect", "", BoolSwitch( &M_debug_server_connect ) )

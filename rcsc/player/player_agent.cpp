@@ -168,6 +168,11 @@ struct PlayerAgent::Impl {
     bool openDebugLog();
 
     /*!
+      \brief open env log file.
+     */
+    bool openEnvLog();
+
+    /*!
       \brief set debug output flags to logger
      */
     void setDebugFlags();
@@ -1138,6 +1143,11 @@ PlayerAgent::Impl::initDebug()
         openDebugLog();
     }
 
+    if ( agent_.config().record() )
+    {
+        openEnvLog();
+    }
+
     if ( agent_.config().debugServerLogging() )
     {
         agent_.M_debug_client.open( agent_.config().logDir(),
@@ -1224,6 +1234,43 @@ PlayerAgent::Impl::openDebugLog()
 
     return true;
 }
+
+/*-------------------------------------------------------------------*/
+/*!
+
+ */
+bool
+PlayerAgent::Impl::openEnvLog()
+{
+    std::ostringstream filepath;
+
+    if ( ! agent_.config().logDir().empty() )
+    {
+        filepath << agent_.config().logDir();
+        if ( *(agent_.config().logDir().rbegin()) != '/' )
+        {
+            filepath << '/';
+        }
+    }
+
+    filepath << agent_.config().teamName() << '-' << agent_.world().self().unum()
+             << agent_.config().debugLogExt();
+
+    elog.open( filepath.str() );
+
+    if ( ! elog.isOpen() )
+    {
+        std::cerr << agent_.config().teamName() << ' '
+                  << agent_.world().self().unum() << ": "
+                  << " Failed to open the env log file [" << filepath.str() << "]"
+                  << std::endl;
+        agent_.M_client->setServerAlive( false );
+        return false;
+    }
+
+    return true;
+}
+
 
 /*-------------------------------------------------------------------*/
 /*!

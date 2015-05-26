@@ -58,6 +58,7 @@ std::string g_str;
 
 //! global variable
 Logger dlog;
+Logger elog;
 
 /*-------------------------------------------------------------------*/
 /*!

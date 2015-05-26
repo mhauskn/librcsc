@@ -105,6 +105,7 @@ private:
     //
 
     bool M_debug; //!< if false, all log files or debug client are never used.
+    bool M_record; //!< if false, all log files or debug client are never used.
 
     //! the directory path string where log files are written. this directory path is used by all log file types.
     std::string M_log_dir;
@@ -384,6 +385,12 @@ public:
       \return debug flag
      */
     bool debug() const { return M_debug; }
+
+    /*!
+      \brief get the record flag
+      \return record flag
+     */
+    bool record() const { return M_record; }
 
     /*!
       \brief get the debug log directory path string.
