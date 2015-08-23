@@ -447,9 +447,9 @@ SelfObject::updateAfterSenseBody( const BodySensor & sense,
 {
     if ( M_sense_body_time == current )
     {
-        std::cerr << current
-                  << "self : updateAfterSense : called twice ??"
-                  << std::endl;
+        // std::cerr << current
+        //           << "self : updateAfterSense : called twice ??"
+        //           << std::endl;
         return;
     }
 

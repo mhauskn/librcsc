@@ -721,10 +721,10 @@ WorldModel::updateAfterSenseBody( const BodySensor & sense_body,
 
     if ( M_sense_body_time == current )
     {
-        std::cerr << teamName() << " : " << self().unum()
-                  << current
-                  << " world.updateAfterSense: called twice"
-                  << std::endl;
+        // std::cerr << teamName() << " : " << self().unum()
+        //           << current
+        //           << " world.updateAfterSense: called twice"
+        //           << std::endl;
         dlog.addText( Logger::WORLD,
                       __FILE__" (updateAfterSense) called twide" );
         return;
@@ -1043,9 +1043,9 @@ WorldModel::updateAfterFullstate( const FullstateSensor & fullstate,
 
     if ( M_fullstate_time == current )
     {
-        std::cerr << teamName() << " : " << self().unum()
-                  << current << " (updateAfterFullstate) called twice "
-                  << std::endl;
+        // std::cerr << teamName() << " : " << self().unum()
+        //           << current << " (updateAfterFullstate) called twice "
+        //           << std::endl;
         return;
     }
 
