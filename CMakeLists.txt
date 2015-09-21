@@ -72,6 +72,7 @@ target_link_libraries(rcgresultprinter rcsc_gz rcsc_rcg)
 target_link_libraries(rcgreverse rcsc_gz rcsc_rcg)
 target_link_libraries(rcgverconv rcsc_gz rcsc_rcg)
 target_link_libraries(rcgversion rcsc_gz)
+target_link_libraries(rcsc_agent rcsc_ann rcsc_geom rcsc_gz rcsc_net rcsc_param rcsc_rcg rcsc_time)
 
 target_include_directories(rcsc_ann PUBLIC ${RCSC_DIR}/ann)
 target_include_directories(rcsc_geom PUBLIC ${RCSC_DIR}/geom ${RCSC_DIR}/geom/triangle)
@@ -80,7 +81,6 @@ target_include_directories(rcsc_net PUBLIC ${RCSC_DIR}/net)
 target_include_directories(rcsc_param PUBLIC ${RCSC_DIR}/param)
 target_include_directories(rcsc_rcg PUBLIC ${RCSC_DIR}/rcg)
 target_include_directories(rcsc_time PUBLIC ${RCSC_DIR}/time)
-
 target_include_directories(rcsc_agent PUBLIC ${RCSC_DIR}/action
   ${RCSC_DIR}/coach ${RCSC_DIR}/common ${RCSC_DIR}/formation
   ${RCSC_DIR}/monitor ${RCSC_DIR}/player ${RCSC_DIR}/trainer
