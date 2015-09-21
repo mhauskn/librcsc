@@ -33,6 +33,7 @@ set(RCSC_GEOM_CPP angle_deg.cpp circle_2d.cpp composite_region_2d.cpp
 foreach(src ${RCSC_GEOM_CPP})
   list(APPEND RCSC_GEOM_SOURCES ${RCSC_DIR}/geom/${src})
 endforeach(src ${RCSC_GEOM_CPP})
+list(APPEND RCSC_GEOM_SOURCES ${RCSC_DIR}/geom/triangle/triangle.c)
 
 add_library(rcsc_ann SHARED ${RCSC_ANN_SOURCES})
 add_library(rcsc_geom SHARED ${RCSC_GEOM_SOURCES})
@@ -54,6 +55,9 @@ add_executable(rcgreverse ${SRC_DIR}/rcgreverse.cpp)
 add_executable(rcgverconv ${SRC_DIR}/rcgverconv.cpp)
 add_executable(rcgversion ${SRC_DIR}/rcgversion.cpp)
 
+# Geom library needs several defines to compile correctly
+target_compile_definitions(rcsc_geom PUBLIC TRILIBRARY REDUCED CDT_ONLY VOID=int REAL=double)
+
 add_dependencies(rcg2txt rcsc_gz rcsc_rcg)
 add_dependencies(rcgrenameteam rcsc_gz rcsc_rcg)
 add_dependencies(rcgresultprinter rcsc_gz rcsc_rcg)
@@ -70,7 +74,7 @@ target_link_libraries(rcgverconv rcsc_gz rcsc_rcg)
 target_link_libraries(rcgversion rcsc_gz)
 
 target_include_directories(rcsc_ann PUBLIC ${RCSC_DIR}/ann)
-target_include_directories(rcsc_geom PUBLIC ${RCSC_DIR}/geom)
+target_include_directories(rcsc_geom PUBLIC ${RCSC_DIR}/geom ${RCSC_DIR}/geom/triangle)
 target_include_directories(rcsc_gz PUBLIC ${RCSC_DIR}/gz)
 target_include_directories(rcsc_net PUBLIC ${RCSC_DIR}/net)
 target_include_directories(rcsc_param PUBLIC ${RCSC_DIR}/param)
