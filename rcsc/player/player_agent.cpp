@@ -1850,12 +1850,12 @@ PlayerAgent::Impl::analyzeHearReferee( const char * msg )
         }
         else
         {
-            if ( agent_.config().version() < 7.0 )
+            if ( true ) // agent_.config().version() < 7.0 )
             {
                 std::cerr << agent_.world().teamName() << ' '
                           << agent_.world().self().unum() << ": "
                           << agent_.world().time()
-                          << " Referee messaga is analyzed as trainer message"
+                          << " Referee message is analyzed as trainer message"
                           << std::endl;
                 analyzeHearTrainer( msg );
             }
