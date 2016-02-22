@@ -58,7 +58,9 @@ BasicClient::BasicClient()
     : M_client_mode( ONLINE ),
       M_server_alive( false ),
       M_interval_msec( 10 ),
-      M_compression_level( 0 )
+      M_compression_level( 0 ),
+      timeout_count_( 0 ),
+      waited_msec_( 0 )
 {
     std::memset( M_message, 0, MAX_MESG );
     M_compression_message.reserve( MAX_MESG );
@@ -176,6 +178,63 @@ BasicClient::runOffline( SoccerAgent * agent )
     while ( isServerAlive() )
     {
         agent->handleMessageOffline();
+    }
+}
+
+bool
+BasicClient::startAgent(SoccerAgent * agent)
+{
+  timeout_count_ = 0;
+  waited_msec_ = 0;
+
+  bool successful_start = agent->handleStart();
+
+  FD_ZERO( &read_fds_ );
+  FD_SET( M_socket->fd(), &read_fds_ );
+  read_fds_back_ = read_fds_;
+
+  return successful_start;
+}
+
+void
+BasicClient::runStep( SoccerAgent * agent )
+{
+    if (! isServerAlive() )
+    {
+        agent->handleExit();
+        return;
+    }
+
+    // set interval timeout
+    struct timeval interval;
+
+    read_fds_ = read_fds_back_;
+    interval.tv_sec = M_interval_msec / 1000;
+    interval.tv_usec = ( M_interval_msec % 1000 ) * 1000;
+
+    int ret = ::select( M_socket->fd() + 1, &read_fds_,
+                        static_cast< fd_set * >( 0 ),
+                        static_cast< fd_set * >( 0 ),
+                        &interval );
+    if ( ret < 0 )
+    {
+      perror( "select" );
+      exit(1);
+    }
+    else if ( ret == 0 )
+    {
+      // no meesage. timeout.
+      waited_msec_ += M_interval_msec;
+      ++timeout_count_;
+      agent->handleTimeout( timeout_count_,
+                            waited_msec_ );
+    }
+    else
+    {
+      // received message, reset wait time
+      waited_msec_ = 0;
+      timeout_count_ = 0;
+      agent->handleMessage();
     }
 }
 

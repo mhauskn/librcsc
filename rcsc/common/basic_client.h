@@ -110,6 +110,11 @@ private:
     BasicClient( const BasicClient & );
     BasicClient & operator=( const BasicClient & );
 
+  int timeout_count_;
+  long waited_msec_;
+  fd_set read_fds_;
+  fd_set read_fds_back_;
+
 public:
 
     /*!
@@ -176,6 +181,9 @@ public:
       When server is not alive, loop is end and handleExit() is called.
      */
     void run( SoccerAgent * agent );
+
+  bool startAgent(SoccerAgent * agent);
+  void runStep( SoccerAgent * agent );
 
 private:
 

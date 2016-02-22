@@ -1852,11 +1852,11 @@ PlayerAgent::Impl::analyzeHearReferee( const char * msg )
         {
             if ( true ) // agent_.config().version() < 7.0 )
             {
-                std::cerr << agent_.world().teamName() << ' '
-                          << agent_.world().self().unum() << ": "
-                          << agent_.world().time()
-                          << " Referee message is analyzed as trainer message"
-                          << std::endl;
+                // std::cerr << agent_.world().teamName() << ' '
+                //           << agent_.world().self().unum() << ": "
+                //           << agent_.world().time()
+                //           << " Referee message is analyzed as trainer message"
+                //           << std::endl;
                 analyzeHearTrainer( msg );
             }
             else

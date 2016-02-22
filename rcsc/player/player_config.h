@@ -194,6 +194,8 @@ public:
      */
     const std::string & teamName() const { return M_team_name; }
 
+    void setTeamName(std::string name) { M_team_name = name; }
+
     /*!
       \brief get the client version
       \return client version
@@ -211,6 +213,8 @@ public:
       \return goalie flag
      */
     bool goalie() const { return M_goalie; }
+
+    void setGoalie(bool goalie) { M_goalie = goalie; }
 
     /*!
       \brief get the interrupt interval for decision making
@@ -248,11 +252,15 @@ public:
      */
     const std::string & host() const { return M_rcssserver_host; }
 
+    void setHost(std::string host) { M_rcssserver_host = host; }
+
     /*!
       \brief get the server port number
       \return server port number
      */
     int port() const { return M_rcssserver_port; }
+
+    void setPort(int port) { M_rcssserver_port = port; }
 
     /*!
       \brief get the server message compression level
@@ -376,6 +384,8 @@ public:
      */
     const std::string & configDir() const { return M_config_dir; }
 
+    void setConfigDir(std::string conf_dir) { M_config_dir = conf_dir; }
+
     //
     // debug
     //
@@ -397,6 +407,8 @@ public:
       \return the debug log directory string.
      */
     const std::string & logDir() const { return M_log_dir; }
+
+    void setLogDir(std::string log_dir) { M_log_dir = log_dir; }
 
     //
     // debug server settings

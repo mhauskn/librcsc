@@ -132,6 +132,15 @@ public:
       }
 
     /*!
+      \brief get configuration set
+      \return reference to the configuration class object
+    */
+    PlayerConfig & mutable_config()
+      {
+          return M_config;
+      }
+
+    /*!
       \brief get debug client interface
       \return reference to the DebugClient object
     */
