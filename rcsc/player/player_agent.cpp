@@ -90,9 +90,11 @@ struct PlayerAgent::Impl {
     //! last action decision game time
     GameTime last_decision_time_;
 
+    // ! last pre-action game time
+    GameTime last_pre_action_time_;
+
     //! current game time
     GameTime current_time_;
-
 
     int clang_min_; //!< supported minimal clang version
     int clang_max_; //!< supported maximal clang version
@@ -144,6 +146,7 @@ struct PlayerAgent::Impl {
           think_received_( false ),
           server_cycle_stopped_( true ),
           last_decision_time_( -1, 0 ),
+          last_pre_action_time_( -1, 0 ),
           current_time_( 0, 0 ),
           clang_min_( 0 ),
           clang_max_( 0 )
@@ -738,6 +741,24 @@ PlayerAgent::seeTimeStamp() const
     return M_impl->see_time_stamp_;
 }
 
+const GameTime &
+PlayerAgent::lastDecisionTime() const
+{
+    return M_impl->last_decision_time_;
+}
+
+const GameTime &
+PlayerAgent::lastPreActionTime() const
+{
+    return M_impl->last_pre_action_time_;
+}
+
+const GameTime &
+PlayerAgent::currentTime() const
+{
+    return M_impl->current_time_;
+}
+
 /*-------------------------------------------------------------------*/
 /*!
 
@@ -1043,6 +1064,151 @@ void
 PlayerAgent::handleExit()
 {
     finalize();
+}
+
+/*-------------------------------------------------------------------*/
+/*!
+
+ */
+void
+PlayerAgent::preAction()
+{
+    MSecTimer timer;
+    dlog.addText( Logger::SYSTEM,
+                  __FILE__" (action) start" );
+
+    if ( config().offlineLogging()
+         && ! ServerParam::i().synchMode() )
+    {
+        M_client->printOfflineThink();
+    }
+
+    //
+    // pre callback
+    //
+    std::for_each( M_pre_action_callbacks.begin(),
+                   M_pre_action_callbacks.end(),
+                   &PeriodicCallback::call_execute );
+    M_pre_action_callbacks.erase( std::remove_if( M_pre_action_callbacks.begin(),
+                                                  M_pre_action_callbacks.end(),
+                                                  &PeriodicCallback::is_finished ),
+                                  M_pre_action_callbacks.end() );
+
+    // check see synchronization
+    if ( M_impl->see_state_.isSynch()
+         && M_impl->see_state_.cyclesTillNextSee() == 0
+         && world().seeTime() != M_impl->current_time_ )
+    {
+        dlog.addText( Logger::SYSTEM,
+                      __FILE__" (action) missed see synch. action without see" );
+        std::cout << world().teamName() << ' '
+                  << world().self().unum() << ": "
+                  << world().time()
+                  << " missed see synch. action without see" << std::endl;
+
+        // set synch timing to illegal.
+        M_impl->see_state_.setLastSeeTiming( SeeState::TIME_NOSYNCH );
+    }
+
+    // ------------------------------------------------------------------------
+    // last update
+    // update positining matrix, offside line, defense line, etc.
+    M_worldmodel.updateJustBeforeDecision( effector(),
+                                           M_impl->current_time_ );
+    if ( config().debugFullstate()
+         && M_fullstate_worldmodel.isValid() )
+    {
+        M_fullstate_worldmodel.updateJustBeforeDecision( effector(),
+                                                         M_impl->current_time_ );
+    }
+
+    // reset last action effect
+    M_effector.reset();
+
+    // ------------------------------------------------------------------------
+    // decide action
+
+    if ( ServerParam::i().synchMode()
+         && ! M_impl->see_state_.isSynch() )
+    {
+        M_impl->adjustSeeSynchSynchMode();
+    }
+
+    //
+    // handle action start event
+    //
+    handleActionStart();
+
+    M_impl->last_pre_action_time_ = M_impl->current_time_;
+}
+
+/*-------------------------------------------------------------------*/
+/*!
+
+ */
+void
+PlayerAgent::executeAction()
+{
+    actionImpl(); // this is pure virtual method
+    M_impl->doArmAction();
+    M_impl->doViewAction();
+    M_impl->doNeckAction();
+    communicationImpl();
+
+    // ------------------------------------------------------------------------
+    // set command effect. these must be called before command composing.
+    // set self view mode, pointto and attentionto info.
+    M_worldmodel.setCommandEffect( effector() );
+    // set cycles till next see, update estimated next see arrival timing
+    M_impl->see_state_.setViewMode( world().self().viewWidth(),
+                                    world().self().viewQuality() );
+
+    // ------------------------------------------------------------------------
+    // compose command string, and send it to the rcssserver
+    {
+        std::ostringstream ostr;
+        M_effector.makeCommand( ostr );
+        const std::string str = ostr.str();
+        if ( str.length() > 0 )
+        {
+            dlog.addText( Logger::SYSTEM,
+                          "---- send[%s]",
+                          str.c_str() );
+            M_client->sendMessage( str.c_str() );
+        }
+    }
+
+    // ------------------------------------------------------------------------
+    // update last decision time
+    M_impl->last_decision_time_ = M_impl->current_time_;
+
+    // dlog.addText( Logger::SYSTEM,
+    //               __FILE__" (action) elapsed %lf [ms]",
+    //               timer.elapsedReal() );
+
+    //
+    // handle action end event
+    //
+    handleActionEnd();
+
+    //
+    // post callback
+    //
+    std::for_each( M_post_action_callbacks.begin(),
+                   M_post_action_callbacks.end(),
+                   &PeriodicCallback::call_execute );
+    M_post_action_callbacks.erase( std::remove_if( M_post_action_callbacks.begin(),
+                                                   M_post_action_callbacks.end(),
+                                                   &PeriodicCallback::is_finished ),
+                                   M_post_action_callbacks.end() );
+
+    //
+    // debugger output
+    //
+    M_impl->printDebug();
+
+    // delete all command objects and say messages
+    M_effector.clearAllCommands();
 }
 
 /*-------------------------------------------------------------------*/
@@ -2736,10 +2902,10 @@ PlayerAgent::doKick( const double & power,
     {
         dlog.addText( Logger::ACTION,
                       __FILE__" (doKick) but not kickable" );
-        std::cerr << world().teamName() << ' '
-                  << world().self().unum() << ": "
-                  << world().time()
-                  << " doKick(). but not kickable" << std::endl;
+        // std::cerr << world().teamName() << ' '
+        //           << world().self().unum() << ": "
+        //           << world().time()
+        //           << " doKick(). but not kickable" << std::endl;
         return false;
     }
     if ( world().self().isFrozen() )
@@ -2747,10 +2913,10 @@ PlayerAgent::doKick( const double & power,
         dlog.addText( Logger::ACTION,
                       __FILE__" (doKick) but in tackle expire period  %d",
                       world().self().tackleExpires() );
-        std::cerr << world().teamName() << ' '
-                  << world().self().unum() << ": "
-                  << world().time()
-                  << " Now Tackle expire period" << std::endl;
+        // std::cerr << world().teamName() << ' '
+        //           << world().self().unum() << ": "
+        //           << world().time()
+        //           << " Now Tackle expire period" << std::endl;
         return false;
     }
 
@@ -2773,10 +2939,10 @@ PlayerAgent::doTurn( const AngleDeg & moment )
         dlog.addText( Logger::ACTION,
                       __FILE__": agent->doTurn. but in tackle expire period  %d",
                       world().self().tackleExpires() );
-        std::cerr << world().teamName() << ' '
-                  << world().self().unum() << ": "
-                  << world().time()
-                  << " Now Tackle expire period" << std::endl;
+        // std::cerr << world().teamName() << ' '
+        //           << world().self().unum() << ": "
+        //           << world().time()
+        //           << " Now Tackle expire period" << std::endl;
         return false;
     }
 
@@ -2799,10 +2965,10 @@ PlayerAgent::doDash( const double & power,
         dlog.addText( Logger::ACTION,
                       __FILE__": agent->doDash. but in tackle expire period  %d",
                       world().self().tackleExpires() );
-        std::cerr << world().teamName() << ' '
-                  << world().self().unum() << ": "
-                  << world().time()
-                  << " Now Tackle expire period" << std::endl;
+        // std::cerr << world().teamName() << ' '
+        //           << world().self().unum() << ": "
+        //           << world().time()
+        //           << " Now Tackle expire period" << std::endl;
         return false;
     }
 
@@ -2825,10 +2991,10 @@ PlayerAgent::doMove( const double & x,
         dlog.addText( Logger::ACTION,
                       __FILE__": agent->doMove. but in tackle expire period  %d",
                       world().self().tackleExpires() );
-        std::cerr << world().teamName() << ' '
-                  << world().self().unum() << ": "
-                  << world().time()
-                  << " Now Tackle expire period" << std::endl;
+        // std::cerr << world().teamName() << ' '
+        //           << world().self().unum() << ": "
+        //           << world().time()
+        //           << " Now Tackle expire period" << std::endl;
         return false;
     }
 

@@ -401,6 +401,7 @@ public:
       \return record flag
      */
     bool record() const { return M_record; }
+    void setRecord(bool record) { M_record = record; }
 
     /*!
       \brief get the debug log directory path string.

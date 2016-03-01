@@ -228,6 +228,15 @@ public:
     const
     TimeStamp & seeTimeStamp() const;
 
+    const
+    GameTime & lastDecisionTime() const;
+
+    const
+    GameTime & lastPreActionTime() const;
+
+    const
+    GameTime & currentTime() const;
+
     /*!
       \brief register kick command
       \param power command argument: kick power
@@ -376,6 +385,9 @@ public:
     */
     bool doIntention();
 
+    virtual
+    void executeAction();
+
 private:
 
     /*!
@@ -384,12 +396,13 @@ private:
     */
     void parse( const char * msg );
 
+protected:
+
     /*!
       \brief main action decision.
     */
+    virtual
     void action();
-
-protected:
 
     /*!
       \brief analyze command line options
@@ -457,6 +470,9 @@ protected:
     */
     virtual
     void handleExit();
+
+    virtual
+    void preAction();
 
     //
     //

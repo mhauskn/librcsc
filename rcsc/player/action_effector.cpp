@@ -726,11 +726,11 @@ ActionEffector::setDash( const double & power,
     {
         dlog.addText( Logger::ACTION,
                        __FILE__" (setDash) over dash power range" );
-        std::cerr << M_agent.world().teamName() << ' '
-                  << M_agent.world().self().unum() << ": "
-                  << M_agent.world().time()
-                  << " over dash power range: " << command_power
-                  << std::endl;
+        // std::cerr << M_agent.world().teamName() << ' '
+        //           << M_agent.world().self().unum() << ": "
+        //           << M_agent.world().time()
+        //           << " over dash power range: " << command_power
+        //           << std::endl;
         command_power = param.normalizeDashPower( command_power );
     }
 
@@ -746,11 +746,11 @@ ActionEffector::setDash( const double & power,
         dlog.addText( Logger::ACTION,
                       __FILE__" (setDash) over dash angle range %.1f",
                       rel_dir.degree() );
-        std::cerr << M_agent.world().teamName() << ' '
-                  << M_agent.world().self().unum() << ": "
-                  << M_agent.world().time()
-                  << " over dash angle range: "
-                  << command_dir << std::endl;
+        // std::cerr << M_agent.world().teamName() << ' '
+        //           << M_agent.world().self().unum() << ": "
+        //           << M_agent.world().time()
+        //           << " over dash angle range: "
+        //           << command_dir << std::endl;
         command_dir = param.normalizeDashAngle( command_dir );
     }
 
