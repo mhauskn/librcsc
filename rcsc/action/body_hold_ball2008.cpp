@@ -161,9 +161,9 @@ Body_HoldBall2008::avoidOpponent( PlayerAgent * agent )
 Vector2D
 Body_HoldBall2008::searchKeepPoint( const WorldModel & wm )
 {
-    static GameTime s_last_update_time( 0, 0 );
-    static std::vector< KeepPoint > s_keep_points;
-    static KeepPoint s_best_keep_point;
+    static thread_local GameTime s_last_update_time( 0, 0 );
+    static thread_local std::vector< KeepPoint > s_keep_points;
+    static thread_local KeepPoint s_best_keep_point;
 
     if ( s_last_update_time != wm.time() )
     {

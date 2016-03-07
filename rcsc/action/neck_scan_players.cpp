@@ -67,11 +67,11 @@ const double Neck_ScanPlayers::INVALID_ANGLE = -360.0;
 bool
 Neck_ScanPlayers::execute( PlayerAgent * agent )
 {
-    static GameTime s_last_calc_time( 0, 0 );
-    static ViewWidth s_last_calc_view_width = ViewWidth::NORMAL;
-    static double s_last_calc_min_neck_angle = 0.0;
-    static double s_last_calc_max_neck_angle = 0.0;
-    static double s_cached_target_angle = 0.0;
+    static thread_local GameTime s_last_calc_time( 0, 0 );
+    static thread_local ViewWidth s_last_calc_view_width = ViewWidth::NORMAL;
+    static thread_local double s_last_calc_min_neck_angle = 0.0;
+    static thread_local double s_last_calc_max_neck_angle = 0.0;
+    static thread_local double s_cached_target_angle = 0.0;
 
     if ( s_last_calc_time != agent->world().time()
          || s_last_calc_view_width != agent->effector().queuedNextViewWidth()

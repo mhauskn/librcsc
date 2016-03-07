@@ -309,7 +309,7 @@ SelfInterceptV13::predictNoDash( std::vector< InterceptInfo > & self_cache ) con
 void
 SelfInterceptV13::predictOneDash( std::vector< InterceptInfo > & self_cache ) const
 {
-    static std::vector< InterceptInfo > tmp_cache;
+    static thread_local std::vector< InterceptInfo > tmp_cache;
 
     const ServerParam & SP = ServerParam::i();
     const BallObject & ball = M_world.ball();
@@ -862,7 +862,7 @@ SelfInterceptV13::predictShortStep( const int max_cycle,
                                     const bool save_recovery,
                                     std::vector< InterceptInfo > & self_cache ) const
 {
-    static std::vector< InterceptInfo > tmp_cache;
+    static thread_local std::vector< InterceptInfo > tmp_cache;
 
     const int max_loop = std::min( MAX_SHORT_STEP, max_cycle );
 
@@ -1749,7 +1749,7 @@ SelfInterceptV13::predictLongStep( const int max_cycle,
                                    const bool save_recovery,
                                    std::vector< InterceptInfo > & self_cache ) const
 {
-    static std::vector< InterceptInfo > tmp_cache;
+    static thread_local std::vector< InterceptInfo > tmp_cache;
 
     const ServerParam & SP = ServerParam::i();
     const BallObject & ball = M_world.ball();

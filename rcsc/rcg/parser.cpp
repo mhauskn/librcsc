@@ -53,7 +53,7 @@ namespace rcg {
 Parser::Creators &
 Parser::creators()
 {
-    static Creators s_instance;
+    static thread_local Creators s_instance;
     return s_instance;
 }
 

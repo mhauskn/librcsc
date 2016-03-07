@@ -55,7 +55,7 @@ namespace {
 #define G_BUFFER_SIZE 8192*4
 
 //! global variable
-static char g_buffer[G_BUFFER_SIZE];
+static thread_local char g_buffer[G_BUFFER_SIZE];
 
 
 //! rounding utility

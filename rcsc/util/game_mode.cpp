@@ -70,7 +70,7 @@ public:
     const
     MapHolder & instance()
       {
-          static MapHolder s_instance;
+          static thread_local MapHolder s_instance;
           return s_instance;
       }
 

@@ -264,7 +264,7 @@ void
 ViewGridMap::update( const GameTime & time,
                      const ViewArea & view_area )
 {
-    static GameTime s_update_time( 0, 0 );
+    static thread_local GameTime s_update_time( 0, 0 );
 
     if ( s_update_time == time )
     {

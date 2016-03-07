@@ -56,7 +56,7 @@ using std::max;
 // #define DEBUG_PRINT_PARTICLE
 
 namespace {
-static int g_filter_count = 0;
+static thread_local int g_filter_count = 0;
 }
 
 namespace rcsc {
@@ -846,7 +846,7 @@ LocalizationPFilter::Impl::resamplePoints( const VisualSensor::MarkerT & marker,
                                            const double & self_face,
                                            const double & self_face_err )
 {
-    static boost::mt19937 s_engine( 49827140 );
+    static thread_local boost::mt19937 s_engine( 49827140 );
     static const size_t max_count = 50;
 
     const std::size_t count = M_points.size();
@@ -1234,8 +1234,8 @@ void
 LocalizationPFilter::Impl::updateParticles( const Vector2D & last_move,
                                             const GameTime & current )
 {
-    static Vector2D s_last_move( 0.0, 0.0 );
-    static GameTime s_last_update_time( -1, 0 );
+    static thread_local Vector2D s_last_move( 0.0, 0.0 );
+    static thread_local GameTime s_last_update_time( -1, 0 );
 
     if ( ! last_move.isValid() )
     {
@@ -1442,7 +1442,7 @@ LocalizationPFilter::Impl::filterParticles( const VisualSensor::MarkerT & marker
 void
 LocalizationPFilter::Impl::resampleParticles()
 {
-    static boost::mt19937 s_gen( 281998167 );
+    static thread_local boost::mt19937 s_gen( 281998167 );
 
     if ( M_particles.empty()
          || M_particles.size() >= 100 )

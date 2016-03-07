@@ -89,7 +89,7 @@ const
 AudioCodec &
 AudioCodec::i()
 {
-    static AudioCodec s_instance;
+    static thread_local AudioCodec s_instance;
 
     return s_instance;
 }

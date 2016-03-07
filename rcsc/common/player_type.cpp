@@ -794,7 +794,7 @@ PlayerType::print( std::ostream & os ) const
 PlayerTypeSet &
 PlayerTypeSet::instance()
 {
-    static PlayerTypeSet S_instance;
+    static thread_local PlayerTypeSet S_instance;
     return S_instance;
 }
 

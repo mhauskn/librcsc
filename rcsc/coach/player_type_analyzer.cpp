@@ -735,7 +735,7 @@ PlayerTypeAnalyzer::checkCollisions()
 void
 PlayerTypeAnalyzer::checkKick()
 {
-    static double S_max_kickable_area2 = -1.0;
+    static thread_local double S_max_kickable_area2 = -1.0;
 
     for ( int i = 0; i < 11; ++i )
     {

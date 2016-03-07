@@ -105,7 +105,7 @@ const double PlayerParam::DEFAULT_CATCHABLE_AREA_L_STRETCH_MAX = 1.3;
 PlayerParam &
 PlayerParam::instance()
 {
-    static PlayerParam S_instance;
+    static thread_local PlayerParam S_instance;
     return S_instance;
 }
 

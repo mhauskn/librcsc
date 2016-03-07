@@ -58,7 +58,7 @@ using namespace formation;
 Formation::Creators &
 Formation::creators()
 {
-    static Creators s_instance;
+    static thread_local Creators s_instance;
     return s_instance;
 }
 

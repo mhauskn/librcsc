@@ -348,7 +348,7 @@ const int ServerParam::FOUL_CYCLES = 5;
 ServerParam &
 ServerParam::instance()
 {
-    static ServerParam S_instance;
+    static thread_local ServerParam S_instance;
     return S_instance;
 }
 

@@ -706,7 +706,7 @@ Body_Dribble2008::doKickTurnsDashes( PlayerAgent * agent,
                                      const double & dash_power,
                                      const int n_turn )
 {
-    static std::vector< Vector2D > self_cache;
+    static thread_local std::vector< Vector2D > self_cache;
 
     const int max_dash = 5;
 
@@ -930,7 +930,7 @@ Body_Dribble2008::doKickDashes( PlayerAgent * agent,
                                 const double & dash_power,
                                 const int dash_count )
 {
-    static std::vector< Vector2D > self_cache;
+    static thread_local std::vector< Vector2D > self_cache;
 
     // do dribble kick. simulate next action queue.
     // kick -> dash -> dash -> ...
@@ -1174,8 +1174,8 @@ Body_Dribble2008::doKickDashesWithBall( PlayerAgent * agent,
                                         const int dash_count,
                                         const bool dodge_mode )
 {
-    static std::vector< Vector2D > my_state;
-    static std::vector< KeepDribbleInfo > dribble_info;
+    static thread_local std::vector< Vector2D > my_state;
+    static thread_local std::vector< KeepDribbleInfo > dribble_info;
 
     my_state.clear();
     dribble_info.clear();

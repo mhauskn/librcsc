@@ -387,8 +387,8 @@ gzfilterstreambuf::sync()
 gzfilterstreambuf::int_type
 gzfilterstreambuf::underflow()
 {
-    static int s_remained = 0; // number of bytes remaining in M_output_buffer
-    static char_type s_remained_char; // remained character in M_output_buffer
+    static thread_local int s_remained = 0; // number of bytes remaining in M_output_buffer
+    static thread_local char_type s_remained_char; // remained character in M_output_buffer
 
     //std::cerr << "underflow" << std::endl;
 
