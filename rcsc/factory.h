@@ -151,7 +151,7 @@ public:
     virtual
     ~AutoReger()
       {
-          M_fact.dereg( M_idx );
+          // M_fact.dereg( M_idx );
       }
 
 private:
