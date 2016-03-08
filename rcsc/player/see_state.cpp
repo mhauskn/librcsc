@@ -152,10 +152,10 @@ SeeState::updateBySenseBody( const GameTime & sense_time,
         dlog.addText( Logger::SYSTEM,
                       __FILE__" (updateBySenseBody) view_width does not match. old=%d sense=%d",
                       M_view_width.type(), vw.type() );
-        std::cerr << sense_time
-                  << " view width does not match . old=" << M_view_width.type()
-                  << " sense=" << vw.type()
-                  << std::endl;
+        // std::cerr << sense_time
+        //           << " view width does not match . old=" << M_view_width.type()
+        //           << " sense=" << vw.type()
+        //           << std::endl;
 
         M_view_width = vw;
     }
@@ -165,10 +165,10 @@ SeeState::updateBySenseBody( const GameTime & sense_time,
         dlog.addText( Logger::SYSTEM,
                       __FILE__" (updateBySenseBody) view_quality does not match. old=%d sense=%d",
                       M_view_quality.type(), vq.type() );
-        std::cerr << sense_time
-                  << " view quality does not match. old=" << M_view_quality.type()
-                  << " sense=" << vq.type()
-                  << std::endl;
+        // std::cerr << sense_time
+        //           << " view quality does not match. old=" << M_view_quality.type()
+        //           << " sense=" << vq.type()
+        //           << std::endl;
 
         M_view_quality = vq;
     }
