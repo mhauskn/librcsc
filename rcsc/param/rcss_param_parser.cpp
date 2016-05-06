@@ -80,13 +80,13 @@ RCSSParamParser::parse( ParamMap & param_map )
         {
             ++n_params;
         }
-        else
-        {
-            std::cerr << "***ERROR*** RCSSParamParser. "
-                      << "unknown parameter name or invalid value. name=["
-                      << it->first << "] value=[" << it->second << "]"
-                      << std::endl;
-        }
+        // else
+        // {
+        //     std::cerr << "***ERROR*** RCSSParamParser. "
+        //               << "unknown parameter name or invalid value. name=["
+        //               << it->first << "] value=[" << it->second << "]"
+        //               << std::endl;
+        // }
     }
 
 #ifdef DEBUG

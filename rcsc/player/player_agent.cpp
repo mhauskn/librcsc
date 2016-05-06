@@ -2446,10 +2446,10 @@ PlayerAgent::Impl::analyzeOK( const char * msg )
         }
     }
 
-    std::cerr << agent_.config().teamName() << ' '
-              << agent_.world().self().unum() << ": "
-              << current_time_
-              << " recv unsupported or illegal ok message [" << msg << "]" << std::endl;
+    // std::cerr << agent_.config().teamName() << ' '
+    //           << agent_.world().self().unum() << ": "
+    //           << current_time_
+    //           << " recv unsupported or illegal ok message [" << msg << "]" << std::endl;
     dlog.addText( Logger::SENSOR,
                   __FILE__" (analyzeOk) unsupported ok" );
 }
