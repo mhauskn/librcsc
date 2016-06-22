@@ -386,7 +386,16 @@ public:
     bool doIntention();
 
     virtual
+    void preAction();
+
+    virtual
     void executeAction();
+
+    /*!
+      \brief main action decision.
+    */
+    virtual
+    void action();
 
 private:
 
@@ -397,12 +406,6 @@ private:
     void parse( const char * msg );
 
 protected:
-
-    /*!
-      \brief main action decision.
-    */
-    virtual
-    void action();
 
     /*!
       \brief analyze command line options
@@ -446,6 +449,9 @@ protected:
     virtual
     void handleMessage();
 
+    virtual
+    bool handleMessageStep();
+
     /*!
       \brief handle offline client log message in offline client mode.
 
@@ -465,14 +471,15 @@ protected:
     void handleTimeout( const int timeout_count,
                         const int waited_msec );
 
+    virtual
+    bool handleTimeoutStep( const int timeout_count,
+                            const int waited_msec );
+
     /*!
       \brief handle exit event
     */
     virtual
     void handleExit();
-
-    virtual
-    void preAction();
 
     //
     //

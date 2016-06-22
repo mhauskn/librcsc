@@ -196,13 +196,13 @@ BasicClient::startAgent(SoccerAgent * agent)
   return successful_start;
 }
 
-void
+bool
 BasicClient::runStep( SoccerAgent * agent )
 {
     if (! isServerAlive() )
     {
         agent->handleExit();
-        return;
+        return false;
     }
 
     // set interval timeout
@@ -226,15 +226,15 @@ BasicClient::runStep( SoccerAgent * agent )
       // no meesage. timeout.
       waited_msec_ += M_interval_msec;
       ++timeout_count_;
-      agent->handleTimeout( timeout_count_,
-                            waited_msec_ );
+      return agent->handleTimeoutStep( timeout_count_,
+                                       waited_msec_ );
     }
     else
     {
       // received message, reset wait time
       waited_msec_ = 0;
       timeout_count_ = 0;
-      agent->handleMessage();
+      return agent->handleMessageStep();
     }
 }
 

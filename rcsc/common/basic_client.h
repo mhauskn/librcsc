@@ -182,8 +182,16 @@ public:
      */
     void run( SoccerAgent * agent );
 
-  bool startAgent(SoccerAgent * agent);
-  void runStep( SoccerAgent * agent );
+    /*!
+      \brief Start the agent. Returns true if successful.
+     */
+    bool startAgent( SoccerAgent * agent );
+
+    /*!
+      \brief Run a single step. Returns true if it's time to take
+      an action, false otherwise.
+     */
+    bool runStep( SoccerAgent * agent );
 
 private:
 

@@ -960,6 +960,70 @@ PlayerAgent::handleMessage()
     }
 }
 
+bool
+PlayerAgent::handleMessageStep()
+{
+    if ( ! M_client )
+    {
+        std::cerr << __FILE__ << " (handleMessage) Client is not registered."
+                  << std::endl;
+        return false;
+    }
+
+    int counter = 0;
+    GameTime start_time = M_impl->current_time_;
+
+    // receive and analyze message
+    while ( M_client->recvMessage() > 0 )
+    {
+        ++counter;
+        parse( M_client->message() );
+    }
+
+    // game cycle is changed while several message parsing
+    if ( M_impl->current_time_.cycle() > start_time.cycle() + 1
+         && start_time.stopped() == 0
+         && M_impl->current_time_.stopped() == 0 )
+    {
+        std::cout << world().teamName() << ' '
+                  << world().self().unum() << ": "
+                  << "parser used several steps -- Missed an action?"
+                  << "  sensory counts= " << counter
+                  << "  start_time= " << start_time
+                  << "  end_time= " << M_impl->current_time_
+                  << std::endl;
+        dlog.addText( Logger::SYSTEM,
+                      __FILE__" (handleMessage) parser used several steps -- action missed! sensed %d"
+                      " start=(%ld, %ld) end=(%ld, %ld)",
+                      counter,
+                      start_time.cycle(), start_time.stopped(),
+                      M_impl->current_time_.cycle(),
+                      M_impl->current_time_.stopped() );
+    }
+
+    if ( M_impl->think_received_ )
+    {
+        dlog.addText( Logger::SYSTEM,
+                      __FILE__" (handleMessage) Got think message: decide action" );
+        M_impl->think_received_ = false;
+        return true;
+    }
+    else if ( ! ServerParam::i().synchMode() )
+    {
+        if ( M_impl->last_decision_time_ != M_impl->current_time_
+             && world().seeTime() == M_impl->current_time_
+             )
+        {
+            // player got a current cycle visual information
+            // decide action imeddiately
+            dlog.addText( Logger::SYSTEM,
+                          __FILE__" (handleMessage) Got see info: decide action" );
+            return true;
+        }
+    }
+    return false;
+}
+
 /*-------------------------------------------------------------------*/
 /*!
 
@@ -1056,6 +1120,64 @@ PlayerAgent::handleTimeout( const int timeout_count,
     action();
 }
 
+bool
+PlayerAgent::handleTimeoutStep( const int timeout_count,
+                                const int waited_msec )
+{
+    if ( ! M_client )
+    {
+        std::cerr << __FILE__ << " (handleTimeout) Client is not registered."
+                  << std::endl;
+        return false;
+    }
+
+    TimeStamp cur_time;
+    cur_time.setCurrent();
+    long msec_from_sense = -1;
+    /*
+      std::cerr << "cur_sec = " << cur_time.sec()
+      << "  cur_usec = " << cur_time.usec()
+      << "   sense_sec=" << M_impl->body_time_stamp_.sec()
+      << "  sense_usec=" << M_impl->body_time_stamp_.usec()
+      << std::endl;
+    */
+    if ( M_impl->body_time_stamp_.sec() > 0 )
+    {
+        msec_from_sense = cur_time.getMSecDiffFrom( M_impl->body_time_stamp_ );
+    }
+
+    dlog.addText( Logger::SYSTEM,
+                  "----- Timeout. msec from sense_body = [%ld] ms."
+                  " Timeout count = %d",
+                  msec_from_sense / ServerParam::i().slowDownFactor(),
+                  timeout_count );
+
+    // estimate server down
+    if ( waited_msec > config().serverWaitSeconds() * 1000 )
+    {
+        std::cout << world().teamName() << ' '
+                  << world().self().unum() << ": "
+                  << "waited "
+                  << waited_msec / 1000
+                  << " seconds. server down??" << std::endl;
+        M_client->setServerAlive( false );
+        return false;
+    }
+
+    // check alarm count etc...
+    if ( ! M_impl->isDecisionTiming( msec_from_sense, timeout_count ) )
+    {
+        return false;
+    }
+
+    // start decision
+    dlog.addText( Logger::SYSTEM,
+                  "----- TIMEOUT DECISION !! [%ld]ms from sense_body",
+                  msec_from_sense / ServerParam::i().slowDownFactor() );
+
+    return true;
+}
+
 /*-------------------------------------------------------------------*/
 /*!
 
@@ -1122,6 +1244,11 @@ PlayerAgent::preAction()
                                                          M_impl->current_time_ );
     }
 
+    //
+    // handle action start event
+    //
+    handleActionStart();
+
     // reset last action effect
     M_effector.reset();
 
@@ -1133,11 +1260,6 @@ PlayerAgent::preAction()
     {
         M_impl->adjustSeeSynchSynchMode();
     }
-
-    //
-    // handle action start event
-    //
-    handleActionStart();
 
     M_impl->last_pre_action_time_ = M_impl->current_time_;
 }
