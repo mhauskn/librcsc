@@ -60,9 +60,15 @@ const double Neck_ScanField::INVALID_ANGLE = -360.0;
 bool
 Neck_ScanField::execute( PlayerAgent * agent )
 {
+#ifdef __APPLE__
+    static GameTime s_last_calc_time( 0, 0 );
+    static ViewWidth s_last_calc_view_width = ViewWidth::NORMAL;
+    static AngleDeg s_cached_target_angle = 0.0;
+#else
     static thread_local GameTime s_last_calc_time( 0, 0 );
     static thread_local ViewWidth s_last_calc_view_width = ViewWidth::NORMAL;
     static thread_local AngleDeg s_cached_target_angle = 0.0;
+#endif
 
     const WorldModel & wm = agent->world();
 

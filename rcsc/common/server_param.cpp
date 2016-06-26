@@ -348,7 +348,11 @@ const int ServerParam::FOUL_CYCLES = 5;
 ServerParam &
 ServerParam::instance()
 {
+#ifdef __APPLE__
+    static ServerParam S_instance;
+#else
     static thread_local ServerParam S_instance;
+#endif
     return S_instance;
 }
 

@@ -70,7 +70,11 @@ public:
     const
     MapHolder & instance()
       {
+#ifdef __APPLE__
+          static MapHolder s_instance;
+#else
           static thread_local MapHolder s_instance;
+#endif
           return s_instance;
       }
 

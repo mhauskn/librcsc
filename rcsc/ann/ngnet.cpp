@@ -68,7 +68,11 @@ NGNet::Unit::randomize( const double & min_weight,
                         const double & max_weight,
                         const double & initial_sigma )
 {
+#ifdef __APPLE__
+    static boost::mt19937 gen( std::time( 0 ) );
+#else
     static thread_local boost::mt19937 gen( std::time( 0 ) );
+#endif
 
     double min_w = min_weight;
     double max_w = max_weight;

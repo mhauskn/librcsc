@@ -89,7 +89,11 @@ const
 AudioCodec &
 AudioCodec::i()
 {
+#ifdef __APPLE__
+    static AudioCodec s_instance;
+#else
     static thread_local AudioCodec s_instance;
+#endif
 
     return s_instance;
 }

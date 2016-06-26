@@ -105,7 +105,11 @@ const double PlayerParam::DEFAULT_CATCHABLE_AREA_L_STRETCH_MAX = 1.3;
 PlayerParam &
 PlayerParam::instance()
 {
+#ifdef __APPLE__
+    static PlayerParam S_instance;
+#else
     static thread_local PlayerParam S_instance;
+#endif
     return S_instance;
 }
 

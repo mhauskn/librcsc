@@ -244,7 +244,11 @@ KickTable::calc_max_velocity( const AngleDeg & target_angle,
 KickTable &
 KickTable::instance()
 {
+#ifdef __APPLE__
+    static KickTable s_instance;
+#else
     static thread_local KickTable s_instance;
+#endif
     return s_instance;
 }
 
@@ -670,7 +674,11 @@ KickTable::createTable( const AngleDeg & angle,
 void
 KickTable::updateState( const WorldModel & world )
 {
+#ifdef __APPLE__
+    static GameTime s_update_time( -1, 0 );
+#else
     static thread_local GameTime s_update_time( -1, 0 );
+#endif
 
     if ( s_update_time == world.time() )
     {

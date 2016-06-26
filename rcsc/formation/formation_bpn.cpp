@@ -70,7 +70,11 @@ FormationBPN::Param::Param()
 void
 FormationBPN::Param::randomize()
 {
+#ifdef __APPLE__
+    static boost::mt19937 gen( std::time( 0 ) );
+#else
     static thread_local boost::mt19937 gen( std::time( 0 ) );
+#endif
     boost::uniform_real<> dst( -0.5, 0.5 );
     boost::variate_generator< boost::mt19937 &, boost::uniform_real<> >
         rng( gen, dst );

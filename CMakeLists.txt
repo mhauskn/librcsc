@@ -2,7 +2,14 @@ cmake_minimum_required (VERSION 2.6)
 project(librcsc)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-add_definitions(-DHAVE_CONFIG_H -DUSE_VECTOR -std=c++11)
+add_definitions(-DHAVE_CONFIG_H -DUSE_VECTOR)
+
+if (!APPLE)
+  add_definitions(-std=c++11)
+endif()
+
+find_package(BOOST 1.45.0 COMPONENTS scoped_ptr cstdint)
+include_directories(${Boost_INCLUDE_DIRS})
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

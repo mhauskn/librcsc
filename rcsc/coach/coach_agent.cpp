@@ -1819,8 +1819,13 @@ CoachAgent::doTeamGraphic( const int x,
                            const int y,
                            const TeamGraphic & team_graphic )
 {
+#ifdef __APPLE__
+    static int send_count = 0;
+    static GameTime send_time( -1, 0 );
+#else
     static thread_local int send_count = 0;
     static thread_local GameTime send_time( -1, 0 );
+#endif
 
     if ( send_time != M_impl->current_time_ )
     {

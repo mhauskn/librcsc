@@ -310,7 +310,11 @@ Vector2D
 FormationKNN::getPosition( const int unum,
                            const Vector2D & focus_point ) const
 {
+#ifdef __APPLE__
+    static std::vector< const SampleData * > ptr_vector;
+#else
     static thread_local std::vector< const SampleData * > ptr_vector;
+#endif
 
     if ( unum < 1 || 11 < unum )
     {
@@ -394,7 +398,11 @@ void
 FormationKNN::getPositions( const Vector2D & focus_point,
                             std::vector< Vector2D > & positions ) const
 {
+#ifdef __APPLE__
+    static std::vector< const SampleData * > ptr_vector;
+#else
     static thread_local std::vector< const SampleData * > ptr_vector;
+#endif
 
     positions.clear();
 

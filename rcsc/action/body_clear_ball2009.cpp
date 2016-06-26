@@ -224,8 +224,13 @@ get_clear_course_recursive( const WorldModel & wm,
 AngleDeg
 get_clear_course( const WorldModel & wm )
 {
+#ifdef __APPLE__
+    static GameTime s_update_time( 0, 0 );
+    static AngleDeg s_last_angle = 0.0;
+#else
     static thread_local GameTime s_update_time( 0, 0 );
     static thread_local AngleDeg s_last_angle = 0.0;
+#endif
 
     if ( s_update_time == wm.time() )
     {

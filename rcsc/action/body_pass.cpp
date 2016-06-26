@@ -156,11 +156,19 @@ Body_Pass::get_best_pass( const WorldModel & world,
                           double * first_speed,
                           int * receiver )
 {
+#ifdef __APPLE__
+    static GameTime S_last_calc_time( 0, 0 );
+    static bool S_last_calc_valid = false;
+    static Vector2D S_last_calc_target;
+    static double S_last_calc_speed = 0.0;
+    static int S_last_calc_receiver = Unum_Unknown;
+#else
     static thread_local GameTime S_last_calc_time( 0, 0 );
     static thread_local bool S_last_calc_valid = false;
     static thread_local Vector2D S_last_calc_target;
     static thread_local double S_last_calc_speed = 0.0;
     static thread_local int S_last_calc_receiver = Unum_Unknown;
+#endif
 
     if ( S_last_calc_time == world.time() )
     {

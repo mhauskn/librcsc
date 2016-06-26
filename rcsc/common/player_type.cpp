@@ -794,7 +794,11 @@ PlayerType::print( std::ostream & os ) const
 PlayerTypeSet &
 PlayerTypeSet::instance()
 {
+#ifdef __APPLE__
+    static PlayerTypeSet S_instance;
+#else
     static thread_local PlayerTypeSet S_instance;
+#endif
     return S_instance;
 }
 

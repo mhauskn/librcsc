@@ -55,8 +55,11 @@ namespace {
 #define G_BUFFER_SIZE 8192*4
 
 //! global variable
+#ifdef __APPLE__
+static char g_buffer[G_BUFFER_SIZE];
+#else
 static thread_local char g_buffer[G_BUFFER_SIZE];
-
+#endif
 
 //! rounding utility
 inline

@@ -59,7 +59,11 @@ namespace rcsc {
 void
 ShootTable2008::search( const PlayerAgent * agent )
 {
+#ifdef __APPLE__
+    static GameTime s_time( 0, 0 );
+#else
     static thread_local GameTime s_time( 0, 0 );
+#endif
 
     /////////////////////////////////////////////////////////////////////
     const WorldModel & wm = agent->world();

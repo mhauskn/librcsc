@@ -735,7 +735,11 @@ PlayerTypeAnalyzer::checkCollisions()
 void
 PlayerTypeAnalyzer::checkKick()
 {
+#ifdef __APPLE__
+    static double S_max_kickable_area2 = -1.0;
+#else
     static thread_local double S_max_kickable_area2 = -1.0;
+#endif
 
     for ( int i = 0; i < 11; ++i )
     {

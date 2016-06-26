@@ -264,7 +264,11 @@ void
 ViewGridMap::update( const GameTime & time,
                      const ViewArea & view_area )
 {
+#ifdef __APPLE__
+    static GameTime s_update_time( 0, 0 );
+#else
     static thread_local GameTime s_update_time( 0, 0 );
+#endif
 
     if ( s_update_time == time )
     {

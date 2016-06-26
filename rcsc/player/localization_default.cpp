@@ -57,7 +57,11 @@ using std::max;
 // #define DEBUG_PRINT_PARTICLE
 
 namespace {
+#ifdef __APPLE__
+static int g_filter_count = 0;
+#else
 static thread_local int g_filter_count = 0;
+#endif
 }
 
 namespace rcsc {
@@ -808,7 +812,11 @@ LocalizationDefault::Impl::resamplePoints( const VisualSensor::MarkerT & marker,
                                            const double & self_face,
                                            const double & self_face_err )
 {
+#ifdef __APPLE__
+    static boost::mt19937 s_engine( 49827140 );
+#else
     static thread_local boost::mt19937 s_engine( 49827140 );
+#endif
     static const size_t max_count = 50;
 
     const std::size_t count = M_points.size();
