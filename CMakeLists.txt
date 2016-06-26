@@ -4,7 +4,7 @@ project(librcsc)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_definitions(-DHAVE_CONFIG_H -DUSE_VECTOR)
 
-if (!APPLE)
+if (NOT APPLE)
   add_definitions(-std=c++11)
 endif()
 
