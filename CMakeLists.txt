@@ -8,7 +8,7 @@ if (NOT APPLE)
   add_definitions(-std=c++11)
 endif()
 
-find_package(BOOST 1.45.0 COMPONENTS scoped_ptr cstdint)
+find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
