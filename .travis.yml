@@ -1,0 +1,21 @@
+sudo: false
+language: cpp
+dist: trusty
+addons:
+  apt:
+    sources:
+      - boost-latest
+      - george-edison55-precise-backports # cmake 3.2.3 / doxygen 1.8.3
+    packages:
+      - cmake
+      - cmake-data
+#      - libboost-system-dev
+#      - libboost-filesystem-dev
+os:
+  - linux
+  - osx
+compiler:
+  - clang
+  - gcc
+script:
+  - cmake -DCMAKE_BUILD_TYPE=Release && make -j4
