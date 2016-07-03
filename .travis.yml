@@ -9,8 +9,7 @@ addons:
     packages:
       - cmake
       - cmake-data
-#      - libboost-system-dev
-#      - libboost-filesystem-dev
+      - libboost-dev
 os:
   - linux
   - osx
