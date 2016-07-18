@@ -525,23 +525,23 @@ ServerParam::setDefaultParam()
 
     M_coach_send_vi_step = DEFAULT_COACH_SEND_VI_STEP;
 
-    M_replay_file = DEFAULT_REPLAY_FILE;
-    M_landmark_file = DEFAULT_LANDMARK_FILE;
+    M_replay_file = ""; //DEFAULT_REPLAY_FILE;
+    M_landmark_file = "~/.rcssserver-landmark.xml"; //DEFAULT_LANDMARK_FILE;
 
     M_send_comms = DEFAULT_SEND_COMMS;
 
     M_text_logging = DEFAULT_TEXT_LOGGING;
     M_game_logging = DEFAULT_GAME_LOGGING;
     M_game_log_version = DEFAULT_GAME_LOG_VERSION;
-    M_text_log_dir = DEFAULT_TEXT_LOG_DIR;
-    M_game_log_dir = DEFAULT_GAME_LOG_DIR;
-    M_text_log_fixed_name = DEFAULT_TEXT_LOG_FIXED_NAME;
-    M_game_log_fixed_name = DEFAULT_GAME_LOG_FIXED_NAME;
+    M_text_log_dir = "./"; //DEFAULT_TEXT_LOG_DIR;
+    M_game_log_dir = "./"; //DEFAULT_GAME_LOG_DIR;
+    M_text_log_fixed_name = "rcssserver"; //DEFAULT_TEXT_LOG_FIXED_NAME;
+    M_game_log_fixed_name = "rcssserver"; //DEFAULT_GAME_LOG_FIXED_NAME;
     M_use_text_log_fixed = DEFAULT_USE_TEXT_LOG_FIXED;
     M_use_game_log_fixed = DEFAULT_USE_GAME_LOG_FIXED;
     M_use_text_log_dated = DEFAULT_USE_TEXT_LOG_DATED;
     M_use_game_log_dated = DEFAULT_USE_GAME_LOG_DATED;
-    M_log_date_format = DEFAULT_LOG_DATE_FORMAT;
+    M_log_date_format = "%Y%m%d%H%M-"; //DEFAULT_LOG_DATE_FORMAT;
     M_log_times = DEFAULT_LOG_TIMES;
     M_record_message = DEFAULT_RECORD_MESSAGES;
     M_text_log_compression = DEFAULT_TEXT_LOG_COMPRESSION;
@@ -573,16 +573,16 @@ ServerParam::setDefaultParam()
     M_kick_off_wait = DEFAULT_KICK_OFF_WAIT;
     M_connect_wait = DEFAULT_CONNECT_WAIT;
     M_game_over_wait = DEFAULT_GAME_OVER_WAIT;
-    M_team_l_start = DEFAULT_TEAM_L_START;
-    M_team_r_start = DEFAULT_TEAM_R_START;
+    M_team_l_start = ""; //DEFAULT_TEAM_L_START;
+    M_team_r_start = ""; //DEFAULT_TEAM_R_START;
 
     M_keepaway_mode = DEFAULT_KEEPAWAY_MODE;
     M_keepaway_length = DEFAULT_KEEPAWAY_LENGTH;
     M_keepaway_width = DEFAULT_KEEPAWAY_WIDTH;
 
     M_keepaway_logging = DEFAULT_KEEPAWAY_LOGGING;
-    M_keepaway_log_dir = DEFAULT_KEEPAWAY_LOG_DIR;
-    M_keepaway_log_fixed_name = DEFAULT_KEEPAWAY_LOG_FIXED_NAME;
+    M_keepaway_log_dir = "./"; //DEFAULT_KEEPAWAY_LOG_DIR;
+    M_keepaway_log_fixed_name = "rcssserver"; //DEFAULT_KEEPAWAY_LOG_FIXED_NAME;
     M_keepaway_log_fixed = DEFAULT_KEEPAWAY_LOG_FIXED;
     M_keepaway_log_dated = DEFAULT_KEEPAWAY_LOG_DATED;
 
@@ -604,7 +604,7 @@ ServerParam::setDefaultParam()
     M_pen_max_goalie_dist_x = DEFAULT_PEN_MAX_GOALIE_DIST_X;
     M_pen_coach_moves_players = DEFAULT_PEN_COACH_MOVES_PLAYERS;
 
-    M_module_dir = DEFAULT_MODULE_DIR;
+    M_module_dir = ""; //DEFAULT_MODULE_DIR;
 
     // 11.0.0
     M_ball_stuck_area = DEFAULT_BALL_STUCK_AREA;
