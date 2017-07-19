@@ -138,7 +138,8 @@ protected:
     void handleMessage() = 0;
 
     virtual
-    bool handleMessageStep() = 0;
+    bool handleMessageStep()
+      { }
 
     /*!
       \brief (virtual) handle offline client log message in offline client mode.
@@ -162,7 +163,8 @@ protected:
 
     virtual
     bool handleTimeoutStep( const int timeout_count,
-                            const int waited_msec ) = 0;
+                            const int waited_msec )
+      { }
 
     /*!
       \brief (pure virtual) handle exit event
