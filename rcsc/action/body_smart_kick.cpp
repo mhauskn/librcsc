@@ -110,10 +110,13 @@ Body_SmartKick::execute( PlayerAgent * agent )
                       M_sequence.power_,
                       (int)M_sequence.pos_list_.size() );
 
-        Vector2D vel = M_sequence.pos_list_.front() - wm.ball().pos();
-        Vector2D kick_accel = vel - wm.ball().vel();
-        agent->doKick( kick_accel.r() / wm.self().kickRate(),
+        if ( wm.ball().posValid() )
+        {
+          Vector2D vel = M_sequence.pos_list_.front() - wm.ball().pos();
+          Vector2D kick_accel = vel - wm.ball().vel();
+          agent->doKick( kick_accel.r() / wm.self().kickRate(),
                        kick_accel.th() - wm.self().body() );
+        }
         return true;
     }
 
